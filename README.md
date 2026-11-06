@@ -51,4 +51,10 @@ On PowerShell: `$env:EXAMPLES_DIR="D:\My UI refs"; npm start`
 | `HOST` | `127.0.0.1` | Set to `0.0.0.0` to open it on your network |
 | `EXAMPLES_DIR` | `./examples` | Your UI examples folder |
 
+## Deploying (Render, Railway, Fly, Docker)
+
+Build command `npm install`, start command `npm start`. The host sets `PORT` and the server then listens on `0.0.0.0` automatically. The health check is at `/healthz`.
+
+Most hosts wipe the disk on every redeploy, so images you upload or save to **My examples** on a hosted copy are temporary. Keep your examples library on a local copy, or attach a persistent disk and point `EXAMPLES_DIR` at it.
+
 Tips: paste an image straight from the clipboard with Ctrl+V, and press Ctrl+Enter in the text box to search.

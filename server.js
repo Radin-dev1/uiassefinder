@@ -3,11 +3,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chatJson, listModels, PROVIDERS } from './lib/ai.js';
 import { searchImages, sourceLinks, SOURCES, SEARCH_PROVIDERS } from './lib/search.js';
-import { ExampleLibrary, mediaTypeFor } from './lib/examples.js';
+import { ExampleLibrary } from './lib/examples.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT) || 5177;
-const HOST = process.env.HOST || '127.0.0.1';
+// Hosts (Render, Railway, Fly, Docker...) set PORT and need 0.0.0.0; locally stay on loopback.
+const HOST = process.env.HOST || (process.env.PORT ? '0.0.0.0' : '127.0.0.1');
 const EXAMPLES_DIR = path.resolve(process.env.EXAMPLES_DIR || path.join(__dirname, 'examples'));
 
 const library = new ExampleLibrary(EXAMPLES_DIR);
@@ -179,9 +180,14 @@ async function rerankWeb(ai, analysis, results, userImage) {
   return [...scored, ...results.filter((r) => !scoredSet.has(r))];
 }
 
-app.listen(PORT, HOST, () => {
-  console.log(`\n  UI Asset Finder running at http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
-  console.log(`  Examples folder: ${EXAMPLES_DIR}\n`);
-});
+app.get('/healthz', (req, res) => res.send('ok'));
 
-export { mediaTypeFor };
+// On Vercel the app is imported as a serverless function instead of listening.
+if (!process.env.VERCEL) {
+  app.listen(PORT, HOST, () => {
+    console.log(`\n  UI Asset Finder running at http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
+    console.log(`  Examples folder: ${EXAMPLES_DIR}\n`);
+  });
+}
+
+export default app;
