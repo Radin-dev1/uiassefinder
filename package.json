@@ -1,0 +1,17 @@
+{
+  "name": "uiassefinder",
+  "version": "1.0.0",
+  "description": "Find UI assets and references on Pinterest, Dribbble, Behance and more from an image, text, or both - plus search your own folder of UI examples.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UI Asset Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span class="logo">◆</span> UI Asset Finder</div>
+    <nav class="tabs">
+      <button data-view="find" class="active">Find</button>
+      <button data-view="library">My examples</button>
+      <button data-view="settings">Settings</button>
+    </nav>
+    <div id="keyStatus" class="pill"></div>
+  </header>
+
+  <main>
+    <!-- FIND -->
+    <section id="view-find" class="view active">
+      <div class="query card">
+        <div id="drop" class="drop" tabindex="0">
+          <input id="fileInput" type="file" accept="image/*" hidden />
+          <div id="dropEmpty"><strong>Drop, paste or click</strong><span>a reference image (optional)</span></div>
+          <img id="dropPreview" alt="" hidden />
+          <button id="clearImage" class="x" title="Remove image" hidden>×</button>
+        </div>
+        <div class="qside">
+          <textarea id="queryText" rows="3" placeholder="Describe what you want… e.g. 'cartoon roblox shop menu with gold coins and green buy buttons'"></textarea>
+          <div class="row wrap" id="sourceChips"></div>
+          <div class="row wrap opts">
+            <label class="check"><input type="checkbox" id="optExamples" checked /> Search my examples</label>
+            <label class="check"><input type="checkbox" id="optRerank" checked /> AI rerank by looking at results</label>
+            <label class="check">Per query <input type="number" id="optPer" min="3" max="30" value="10" /></label>
+            <button id="searchBtn" class="primary">Find assets</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="status" class="status" hidden></div>
+
+      <div id="results" hidden>
+        <div class="card analysis">
+          <div class="swatches" id="swatches"></div>
+          <p id="analysisDesc"></p>
+          <div class="row wrap" id="analysisTags"></div>
+          <div class="row wrap" id="analysisQueries"></div>
+        </div>
+
+        <div class="subtabs">
+          <button data-sub="web" class="active">Web <span id="cntWeb"></span></button>
+          <button data-sub="ex">My examples <span id="cntEx"></span></button>
+          <button data-sub="links">Open on sites</button>
+        </div>
+        <div id="sub-web" class="sub active"><div class="grid" id="gridWeb"></div></div>
+        <div id="sub-ex" class="sub"><div class="grid" id="gridEx"></div></div>
+        <div id="sub-links" class="sub"><div id="linkList"></div></div>
+      </div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section id="view-library" class="view">
+      <div class="card">
+        <div class="row between wrap">
+          <div>
+            <h2>My UI examples</h2>
+            <p class="muted">Folder: <code id="exDir"></code><br />Drop images in that folder (subfolders are fine) or upload here, then index them so the AI can search them.</p>
+          </div>
+          <div class="row wrap">
+            <input id="uploadFolder" placeholder="subfolder (optional)" />
+            <label class="btn">Upload images<input id="uploadInput" type="file" accept="image/*" multiple hidden /></label>
+            <button id="indexBtn" class="primary">Index new images</button>
+            <button id="refreshEx">Refresh</button>
+          </div>
+        </div>
+        <input id="exFilter" class="filter" placeholder="Filter by name, tag or description…" />
+        <div id="exStats" class="muted"></div>
+      </div>
+      <div class="grid" id="gridLib"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="view-settings" class="view">
+      <div class="card settings">
+        <h2>AI model</h2>
+        <p class="muted">Used to understand your image/text, write search queries, rank results and index your examples. Use a model with vision (image) support.</p>
+        <label>Provider <select id="aiProvider"></select></label>
+        <label id="baseUrlWrap" hidden>Base URL <input id="aiBaseUrl" placeholder="http://localhost:11434/v1" /></label>
+        <label>API key <input id="aiKey" type="password" autocomplete="off" placeholder="paste your key" /></label>
+        <label>Model
+          <div class="row"><input id="aiModel" list="modelList" placeholder="model id" /><button id="loadModels">Load models</button></div>
+          <datalist id="modelList"></datalist>
+        </label>
+
+        <h2>Image search</h2>
+        <p class="muted">Needed to pull real images from Pinterest, Dribbble, Behance etc. Pick "No search key" to just get ready-made search links.</p>
+        <label>Search API <select id="searchProvider"></select></label>
+        <label id="searchKeyWrap">Search API key <input id="searchKey" type="password" autocomplete="off" /></label>
+        <p class="muted" id="searchSignup"></p>
+
+        <div class="row"><button id="saveSettings" class="primary">Save</button><span id="savedMsg" class="muted"></span></div>
+        <p class="muted small">Keys are saved only in this browser (localStorage) and sent straight from your local server to the provider.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="lightbox" hidden>
+    <img id="lbImg" alt="" />
+    <div class="lbbar"><span id="lbTitle"></span><a id="lbOpen" target="_blank" rel="noopener">Open page ↗</a></div>
+  </div>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
